@@ -23,7 +23,7 @@ class MyClient(discord.Client):
             self.text_channel_names.append(str(i))
             self.text_channels.append(i)
             
-        await client.change_presence(activity=discord.Game(name="with <word>"))
+        await client.change_presence(activity=discord.Game(name="with....uhhhhh"))
     
     async def on_message(self, message):    
         print('Message from {0.author} from {0.channel}: {0.content}'.format(message))
@@ -31,14 +31,17 @@ class MyClient(discord.Client):
         words = text.split(" ")
         
         self.challenged = ""
-        self.challenger = ""
+        self.challenger = message.author
         
-        if words[0] == "rps" and words[1] == "challenge":
+        challenge_sent = words[0] == "rps" and words[1] == "challenge"
+        
+        if challenge_sent:
             challenged = words[2]
-        
-        
-        
-        await message.channel.send("'{}'".format("Hello there, I'm a bot"))
+            print("Challenge sent from " , self.challenger , "to" , self.challenged)
+            
+            await message.channel.send("'{}'".format("Hey it's me"))
+            
+        #await message.channel.send("'{}'".format("Hello there, I'm a bot"))
         
         
 
