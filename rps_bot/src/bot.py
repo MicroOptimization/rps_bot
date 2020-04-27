@@ -6,10 +6,9 @@ Github: github.com/MicroOptimization
 """
 import discord
 import key_retriever
+import asyncio
 
 class MyClient(discord.Client):
-
-    
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
@@ -22,27 +21,38 @@ class MyClient(discord.Client):
         for i in client.get_all_channels():
             self.text_channel_names.append(str(i))
             self.text_channels.append(i)
-            
-        await client.change_presence(activity=discord.Game(name="with....uhhhhh"))
+        
+        users = client.users
+        await client.change_presence(activity=discord.Game(name="with scissors"))
     
-    async def on_message(self, message):    
+    async def on_message(self, message):
+        print("-------------------------")
         print('Message from {0.author} from {0.channel}: {0.content}'.format(message))
         text = message.content
         words = text.split(" ")
         
-        self.challenged = ""
-        self.challenger = message.author
-        
-        challenge_sent = words[0] == "rps" and words[1] == "challenge"
+        challenge_sent = len(words) >= 3 and words[0] == "rps" and words[1] == "challenge"
         
         if challenge_sent:
-            challenged = words[2]
+            
+            self.challenged = client.get_user(int(words[2][3:-1]))
+            self.challenger = message.author
+            
+            print("challenged: " , type(self.challenged))
+            print("challenger: " , type(self.challenger))
+            
             print("Challenge sent from " , self.challenger , "to" , self.challenged)
+            print("field: " , self.challenged)
+            await asyncio.sleep(0.5)
             
-            await message.channel.send("'{}'".format("Hey it's me"))
             
-        #await message.channel.send("'{}'".format("Hello there, I'm a bot"))
-        
+            await self.challenged.send("You've been challenged by: {}".format(self.challenger))
+            await self.challenged.send("Send me your choice:")
+            await self.challenged.send("Rock, paper, or scissors?")
+            
+            await message.author.send("You've challenged: {}".format(self.challenged))
+            await message.author.send("Send me your choice:")
+            await message.author.send("Rock, paper, or scissors?")
         
 
 client = MyClient()
