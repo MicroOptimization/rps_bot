@@ -18,6 +18,8 @@ class MyClient(discord.Client):
         self.text_channel_names = []
         self.text_channels = []
         
+        self.challenge_sent = False
+        
         for i in client.get_all_channels():
             self.text_channel_names.append(str(i))
             self.text_channels.append(i)
@@ -32,8 +34,8 @@ class MyClient(discord.Client):
         words = text.split(" ")
         
         
-        
-        challenge_sent = len(words) >= 3 and words[0] == "rps" and words[1] == "challenge"
+        if self.challenge_sent == False:
+            self.challenge_sent = len(words) >= 3 and words[0] == "rps" and words[1] == "challenge"
         
         print(len(words) >= 3)
         
@@ -42,21 +44,21 @@ class MyClient(discord.Client):
         print(words[1] == "challenge")
         print()
         #"""
-        if challenge_sent:
+        if self.challenge_sent:
             self.challenged = client.get_user(int(words[2][3:-1]))
             self.challenger = message.author
         
         
         print(message.author == self.challenger)
         print(str(message.author == str(self.challenger)))
-        print(challenge_sent)
+        print(self.challenge_sent)
         
-        if challenge_sent and message.author == self.challenger:
+        if self.challenge_sent and message.author == self.challenger:
             print("Challenger has messaged Me ---------------------------")
         else:
             print("Challenger has not messaged me")
         
-        if challenge_sent and message.author == self.challenged:
+        if self.challenge_sent and message.author == self.challenged:
             print("Challenged has messaged Me ---------------------------")
         else:
             print("Challenged has not messaged me")
@@ -67,7 +69,7 @@ class MyClient(discord.Client):
         print(str(message.author))
         print(str(self.challenger))
         
-        if challenge_sent:
+        if self.challenge_sent:
             
             self.challenged = client.get_user(int(words[2][3:-1]))
             self.challenger = message.author
