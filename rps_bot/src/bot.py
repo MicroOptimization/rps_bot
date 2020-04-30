@@ -40,10 +40,9 @@ class MyClient(discord.Client):
         print(len(words) >= 3)
         
         print(words[0] == "rps")
-        
         print(words[1] == "challenge")
         print()
-        #"""
+        
         if self.challenge_sent:
             self.challenged = client.get_user(int(words[2][3:-1]))
             self.challenger = message.author
@@ -79,10 +78,9 @@ class MyClient(discord.Client):
             
             print("Challenge sent from " , self.challenger , "to" , self.challenged)
             print("field: " , self.challenged)
+            
             await asyncio.sleep(0.5)
             
-            
-               
             await message.channel.send("'{} just challenged {} to a game of Rock Paper Scissors'".format(self.challenger, self.challenged))
          
             await self.challenged.send("You've been challenged by: {}".format(self.challenger))
@@ -98,6 +96,6 @@ class MyClient(discord.Client):
         
 client = MyClient()
 
-key = key_retriever.get_key() #Insert your key here
+key = key_retriever.get_key() #Insert your key retriever here
 
 client.run(key)
