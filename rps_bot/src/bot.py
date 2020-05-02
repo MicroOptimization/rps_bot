@@ -87,6 +87,7 @@ class MyClient(discord.Client):
         if self.challenged_chosen and self.challenger_chosen:
             rps.resolve(self.challenger_choice, self.challenged_choice)
            
+           
         if self.challenge_sent:
             
             self.challenged = client.get_user(int(words[2][3:-1]))
