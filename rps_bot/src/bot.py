@@ -26,7 +26,10 @@ class MyClient(discord.Client):
         
         users = client.users
         await client.change_presence(activity=discord.Game(name="with scissors"))
-    
+        
+        self.challenger_choice = ""
+        self.challenged_choice = ""
+        
     async def on_message(self, message):
         print("-------------------------")
         print('Message from {0.author} from {0.channel}: {0.content}'.format(message))
@@ -46,12 +49,13 @@ class MyClient(discord.Client):
         if self.challenge_sent:
             self.challenged = client.get_user(int(words[2][3:-1]))
             self.challenger = message.author
-        
+            
         
         print(message.author == self.challenger)
         print(str(message.author == str(self.challenger)))
         print(self.challenge_sent)
         
+        """
         if self.challenge_sent and message.author == self.challenger:
             print("Challenger has messaged Me ---------------------------")
         else:
@@ -61,6 +65,7 @@ class MyClient(discord.Client):
             print("Challenged has messaged Me ---------------------------")
         else:
             print("Challenged has not messaged me")
+        """
         
         print(message.author)
         print(self.challenger)
@@ -68,6 +73,20 @@ class MyClient(discord.Client):
         print(str(message.author))
         print(str(self.challenger))
         
+        if message.author == self.challenger:
+            print("challenger sent")
+            if len(words) > 2 and words[0].lower() == "choice:": 
+                self.challenger_choice = words[1]
+                self.challenger_chosen = True
+        elif message.author == self.challenger:
+            print("challenged sent")
+            if len(words) > 2 and words[0].lower() == "choice:": 
+                self.challenged_choice = words[1]
+                self.challenged_chosen = True    
+        
+        if self.challenged_chosen and self.challenger_chosen:
+            rps.resolve(self.challenger_choice, self.challenged_choice)
+           
         if self.challenge_sent:
             
             self.challenged = client.get_user(int(words[2][3:-1]))
